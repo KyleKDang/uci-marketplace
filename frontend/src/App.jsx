@@ -38,6 +38,7 @@ function App() {
     <Login onLogin={handleLogin} onSwitchToSignup={() => setShowSignup(true)} />
   );
 }
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProductInfoPage from './pages/ProductInfoPage';
 

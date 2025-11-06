@@ -69,6 +69,7 @@ function ListingCard({ listing, onDelete }) {
     </div>
   );
 }
+
 import { useNavigate } from 'react-router-dom';
 
 function ListingCard({ listing, onDelete }) {
