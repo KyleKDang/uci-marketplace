@@ -6,12 +6,14 @@ function CreateListingModal({ onClose, onSuccess }) {
     description: '',
     price: '',
     category: 'Textbooks',
+    region: 'Middle Earth',
     image: null
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const categories = ['Textbooks', 'Furniture', 'Electronics', 'Clothing', 'Tickets', 'Housing', 'Other'];
+  const regions = ['Middle Earth', 'Mesa', 'ACC', 'Verano Place', 'Campus Village', 'Palo Verde', 'UTC'];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +27,7 @@ function CreateListingModal({ onClose, onSuccess }) {
       data.append('description', formData.description);
       data.append('price', formData.price);
       data.append('category', formData.category);
+      data.append('region', formData.region);
       if (formData.image) {
         data.append('image', formData.image);
       }
@@ -75,7 +78,7 @@ function CreateListingModal({ onClose, onSuccess }) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Price ($)</label>
               <input
@@ -97,6 +100,19 @@ function CreateListingModal({ onClose, onSuccess }) {
               >
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Region</label>
+              <select
+                value={formData.region}
+                onChange={(e) => setFormData({ ...formData, region: e.target.value })}
+                className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {regions.map(reg => (
+                  <option key={reg} value={reg}>{reg}</option>
                 ))}
               </select>
             </div>

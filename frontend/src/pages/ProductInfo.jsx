@@ -91,10 +91,16 @@ const ProductInfo = () => {
                 ${product.price.toFixed(2)}
               </div>
 
-              <div className="mb-4">
+              {/* Category and Region badges */}
+              <div className="mb-4 flex flex-wrap gap-2">
                 <span className="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
                   {product.category}
                 </span>
+                {product.region && (
+                  <span className="inline-block bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">
+                    {product.region}
+                  </span>
+                )}
               </div>
 
               {product.description && (

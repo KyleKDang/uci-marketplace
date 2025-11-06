@@ -8,15 +8,13 @@ function ListingCard({ listing, onDelete }) {
   const currentUser = JSON.parse(localStorage.getItem('user'));
   const isOwner = currentUser && currentUser.id === listing.user_id;
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
   const handleDelete = async () => {
     if (!confirm('Delete this listing?')) return;
 
     setDeleting(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/listings/${listing.id}`, {
+      const response = await fetch(`'http://localhost:8000'/listings/${listing.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -59,11 +57,16 @@ function ListingCard({ listing, onDelete }) {
         )}
       </div>
 
-      {/* Category badge */}
-      <div>
+      {/* Category and Region badges */}
+      <div className="flex gap-2 mt-1">
         <span className="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
           {listing.category}
         </span>
+        {listing.region && (
+          <span className="inline-block text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+            {listing.region}
+          </span>
+        )}
       </div>
 
       {/* Title - clickable */}
