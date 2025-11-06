@@ -1,4 +1,3 @@
-Steven/Product-Info-Page
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -60,7 +59,7 @@ const ProductInfoPage = () => {
             {/* Product Image Section */}
             <div className="flex items-center justify-center bg-gray-100 rounded-lg p-8">
               <img
-                src={product.image}
+                src={`http://localhost:8000${product.image_url}`}
                 alt={product.title}
                 className="max-w-full h-auto object-cover rounded-lg"
               />

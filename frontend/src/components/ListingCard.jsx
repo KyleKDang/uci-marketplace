@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ListingCard({ listing, onDelete }) {
   const [deleting, setDeleting] = useState(false);
+  const navigate = useNavigate();
   
   const currentUser = JSON.parse(localStorage.getItem('user'));
   const isOwner = currentUser && currentUser.id === listing.user_id;
@@ -25,6 +27,10 @@ function ListingCard({ listing, onDelete }) {
     } finally {
       setDeleting(false);
     }
+  };
+
+  const handleViewDetails = () => {
+    navigate(`/listing/${listing.id}`);
   };
 
   return (
@@ -53,7 +59,10 @@ function ListingCard({ listing, onDelete }) {
       )}
 
       <div className="flex gap-2 mt-4">
-        <button className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        <button 
+          onClick={handleViewDetails}
+          className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        >
           Contact
         </button>
         {isOwner && (
@@ -66,22 +75,6 @@ function ListingCard({ listing, onDelete }) {
           </button>
         )}
       </div>
-    </div>
-  );
-}
-
-import { useNavigate } from 'react-router-dom';
-
-function ListingCard({ listing, onDelete }) {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/listing/${listing.id}`);
-  };
-
-  return (
-    <div onClick={handleClick} className="cursor-pointer ...">
-      {/* Your existing card content */}
     </div>
   );
 }

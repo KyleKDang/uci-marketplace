@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
+import ProductInfoPage from './pages/ProductInfoPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -28,23 +30,32 @@ function App() {
     localStorage.removeItem('user');
   };
 
-  if (user) {
-    return <Dashboard user={user} onLogout={handleLogout} />;
-  }
-
-  return showSignup ? (
-    <Signup onLogin={handleLogin} onSwitchToLogin={() => setShowSignup(false)} />
-  ) : (
-    <Login onLogin={handleLogin} onSwitchToSignup={() => setShowSignup(true)} />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : showSignup ? (
+              <Signup onLogin={handleLogin} onSwitchToLogin={() => setShowSignup(false)} />
+            ) : (
+              <Login onLogin={handleLogin} onSwitchToSignup={() => setShowSignup(true)} />
+            )
+          } 
+        />
+        <Route 
+          path="/dashboard" 
+          element={user ? <Dashboard user={user} onLogout={handleLogout} /> : <Navigate to="/" replace />} 
+        />
+        <Route 
+          path="/listing/:id" 
+          element={user ? <ProductInfoPage /> : <Navigate to="/" replace />} 
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProductInfoPage from './pages/ProductInfoPage';
-
-<Routes>
-  <Route path="/dashboard" element={<Dashboard />} />
-  <Route path="/listing/:id" element={<ProductInfoPage />} />
-  {/* other routes */}
-</Routes>
 export default App;
