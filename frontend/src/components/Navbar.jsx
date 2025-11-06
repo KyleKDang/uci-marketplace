@@ -6,7 +6,7 @@ function Navbar({ user, onLogout }) {
           <h1 className="text-xl font-bold text-blue-600">UCI Marketplace</h1>
           
           <div className="flex items-center gap-4">
-            <span className="text-sm">Hi, {user.name}</span>
+            <span className="text-sm">Hello, {user.name}</span>
             <button
               onClick={onLogout}
               className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
