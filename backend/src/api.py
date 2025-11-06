@@ -1,15 +1,12 @@
 """
 UCI Marketplace Backend API - Simple with Auth
 
-
 Basic authentication using sessions (no JWT complexity)
 Works with Python 3.13!
-
 
 To run:
 $ python -m uvicorn src.api:app --reload
 """
-
 
 from fastapi import FastAPI, HTTPException, Depends, UploadFile, File, Form, Header, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,24 +37,15 @@ REGIONS = [
     "UTC",
 ]
 
-
-
-
-
-
 DATABASE_URL = "sqlite:///./marketplace.db"
-
 
 engine = create_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False}
 )
 
-
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
-
-
 
 
 # ============================================
@@ -77,8 +65,6 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
 
 
-
-
 class Listing(Base):
     """Listing table"""
     __tablename__ = "listings"
@@ -94,12 +80,8 @@ class Listing(Base):
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
 
 
-
-
 # Create tables
 Base.metadata.create_all(bind=engine)
-
-
 
 
 # ============================================
@@ -113,13 +95,9 @@ class UserSignup(BaseModel):
     password: str
 
 
-
-
 class UserLogin(BaseModel):
     email: str
     password: str
-
-
 
 
 # ============================================
@@ -128,7 +106,6 @@ class UserLogin(BaseModel):
 
 
 app = FastAPI(title="UCI Marketplace API")
-
 
 # CORS
 app.add_middleware(
@@ -139,16 +116,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # Create uploads directory
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
-
 # Serve images
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
-
-
 
 
 # ============================================
@@ -162,8 +135,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
 
 
 def get_current_user(authorization: str = Header(None)):
@@ -185,8 +156,6 @@ def get_current_user(authorization: str = Header(None)):
         return user
     finally:
         db.close()
-
-
 
 
 # ============================================
@@ -230,8 +199,6 @@ async def signup(user_data: UserSignup):
         db.close()
 
 
-
-
 @app.post("/auth/login")
 async def login(user_data: UserLogin):
     """Login to account"""
@@ -259,8 +226,6 @@ async def login(user_data: UserLogin):
         db.close()
 
 
-
-
 @app.get("/auth/me")
 async def get_me(current_user: User = Depends(get_current_user)):
     """Get current user info"""
@@ -271,8 +236,6 @@ async def get_me(current_user: User = Depends(get_current_user)):
     }
 
 
-
-
 # ============================================
 # LISTING ROUTES
 # ============================================
@@ -281,8 +244,6 @@ async def get_me(current_user: User = Depends(get_current_user)):
 @app.get("/")
 async def root():
     return {"message": "UCI Marketplace API"}
-
-
 
 
 @app.get("/listings")
@@ -309,8 +270,6 @@ async def get_listings():
         db.close()
 
 
-
-
 @app.get("/listings/{listing_id}")
 async def get_listing(listing_id: int):
     """Get single listing"""
@@ -328,12 +287,11 @@ async def get_listing(listing_id: int):
             "category": listing.category,
             "image_url": listing.image_url,
             "user_id": listing.user_id,
+            "region": listing.region,
             "created_at": listing.created_at.isoformat()
         }
     finally:
         db.close()
-
-
 
 
 @app.post("/listings")
@@ -393,8 +351,6 @@ async def create_listing(
         db.close()
 
 
-
-
 @app.delete("/listings/{listing_id}")
 async def delete_listing(
     listing_id: int,
@@ -422,8 +378,6 @@ async def delete_listing(
         return {"message": "Deleted"}
     finally:
         db.close()
-
-
 
 
 @app.get("/categories")
