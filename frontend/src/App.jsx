@@ -38,5 +38,12 @@ function App() {
     <Login onLogin={handleLogin} onSwitchToSignup={() => setShowSignup(true)} />
   );
 }
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ProductInfoPage from './pages/ProductInfoPage';
 
+<Routes>
+  <Route path="/dashboard" element={<Dashboard />} />
+  <Route path="/listing/:id" element={<ProductInfoPage />} />
+  {/* other routes */}
+</Routes>
 export default App;

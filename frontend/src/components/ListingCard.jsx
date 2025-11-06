@@ -69,5 +69,20 @@ function ListingCard({ listing, onDelete }) {
     </div>
   );
 }
+import { useNavigate } from 'react-router-dom';
+
+function ListingCard({ listing, onDelete }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/listing/${listing.id}`);
+  };
+
+  return (
+    <div onClick={handleClick} className="cursor-pointer ...">
+      {/* Your existing card content */}
+    </div>
+  );
+}
 
 export default ListingCard;
