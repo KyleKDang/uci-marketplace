@@ -11,6 +11,18 @@ function Login({ onLogin, onSwitchToSignup }) {
     setError('');
     setLoading(true);
 
+    if (!email.endsWith('@uci.edu')) {
+      setError('Must use a valid UCI email (@uci.edu)');
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:8000/auth/login', {
         method: 'POST',
