@@ -124,6 +124,11 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 
+@app.get("/")
+async def root():
+    return {"message": "UCI Marketplace API"}
+
+
 # ============================================
 # HELPER FUNCTIONS
 # ============================================
@@ -237,13 +242,31 @@ async def get_me(current_user: User = Depends(get_current_user)):
 
 
 # ============================================
-# LISTING ROUTES
+# USER ROUTES
 # ============================================
 
 
-@app.get("/")
-async def root():
-    return {"message": "UCI Marketplace API"}
+@app.get("/users/{user_id}")
+async def get_user(user_id: int):
+    """Get user info (public data only)"""
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        return {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email
+        }
+    finally:
+        db.close()
+
+
+# ============================================
+# LISTING ROUTES
+# ============================================
 
 
 @app.get("/listings")

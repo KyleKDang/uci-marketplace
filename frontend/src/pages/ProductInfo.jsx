@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const API_URL = "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const ProductInfo = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
+  const [seller, setSeller] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -17,6 +18,9 @@ const ProductInfo = () => {
         if (response.ok) {
           const data = await response.json();
           setProduct(data);
+          
+          // Fetch seller info
+          fetchSeller(data.user_id);
         } else {
           setError('Product not found');
         }
@@ -27,8 +31,31 @@ const ProductInfo = () => {
       }
     };
 
+    const fetchSeller = async (userId) => {
+      try {
+        const response = await fetch(`${API_URL}/users/${userId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setSeller(data);
+        }
+      } catch (err) {
+        console.error('Could not fetch seller info');
+      }
+    };
+
     fetchProduct();
   }, [id]);
+
+  const handleContactSeller = () => {
+    if (seller && seller.email) {
+      const subject = encodeURIComponent(`Interested in: ${product.title}`);
+      const body = encodeURIComponent(`Hi,\n\nI'm interested in your listing "${product.title}" for $${product.price}.\n\nPlease let me know if it's still available.\n\nThanks!`);
+      
+      window.location.href = `mailto:${seller.email}?subject=${subject}&body=${body}`;
+    } else {
+      alert('Seller contact information not available');
+    }
+  };
 
   if (loading) {
     return (
@@ -111,7 +138,17 @@ const ProductInfo = () => {
                 </div>
               )}
 
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition">
+              {/* Seller info */}
+              {seller && (
+                <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">Seller: <span className="font-medium">{seller.name}</span></p>
+                </div>
+              )}
+
+              <button 
+                onClick={handleContactSeller}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition"
+              >
                 Contact Seller
               </button>
               
