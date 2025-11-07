@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = "http://localhost:8000";
+
 function ListingCard({ listing, onDelete }) {
   const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ function ListingCard({ listing, onDelete }) {
     setDeleting(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`'http://localhost:8000'/listings/${listing.id}`, {
+      const response = await fetch(`${API_URL}/listings/${listing.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

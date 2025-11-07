@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
+const API_URL = "http://localhost:8000";
+
 const ProductInfo = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -11,7 +13,7 @@ const ProductInfo = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/listings/${id}`);
+        const response = await fetch(`${API_URL}/listings/${id}`);
         if (response.ok) {
           const data = await response.json();
           setProduct(data);
