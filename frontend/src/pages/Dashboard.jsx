@@ -8,8 +8,10 @@ function Dashboard({ user, onLogout }) {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState('All');
+  const [locationFilter, setLocationFilter] = useState('All');
 
   const categories = ['All', 'Textbooks', 'Furniture', 'Electronics', 'Clothing', 'Tickets', 'Housing', 'Other'];
+  const locations = ['All', 'Middle Earth', 'Mesa', 'ACC', 'Verano Place', 'Campus Village', 'Palo Verde', 'UTC'];
 
   useEffect(() => {
     fetchListings();
@@ -38,12 +40,14 @@ function Dashboard({ user, onLogout }) {
     fetchListings();
   };
 
-  const filteredListings = filter === 'All' 
-    ? listings 
-    : listings.filter(l => l.category === filter);
+  const filteredListings = listings.filter(l => {
+    const matchesCategory = filter === 'All' || l.category === filter;
+    const matchesLocation = locationFilter === 'All' || l.region === locationFilter;
+    return matchesCategory && matchesLocation;
+  });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-blue-50">
       <Navbar user={user} onLogout={onLogout} />
 
       <div className="max-w-7xl mx-auto px-4 py-6">
@@ -51,13 +55,13 @@ function Dashboard({ user, onLogout }) {
           <h2 className="text-2xl font-bold">Browse Listings</h2>
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="bg-blue-800 text-yellow-400 px-4 py-2 rounded hover:bg-blue-900 font-semibold"
           >
             + New Listing
           </button>
         </div>
 
-        {/* Filters */}
+        {/* Category Filters */}
         <div className="flex gap-2 mb-6 overflow-x-auto">
           {categories.map(cat => (
             <button
@@ -65,13 +69,33 @@ function Dashboard({ user, onLogout }) {
               onClick={() => setFilter(cat)}
               className={`px-4 py-2 rounded whitespace-nowrap ${
                 filter === cat
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-blue-800 text-yellow-400 font-semibold'
                   : 'bg-white border hover:bg-gray-50'
               }`}
             >
               {cat}
             </button>
           ))}
+        </div>
+
+        {/* Location Filters */}
+        <div className="mb-4">
+          <h3 className="text-sm font-semibold text-gray-700 mb-2">Filter by Location:</h3>
+          <div className="flex gap-2 overflow-x-auto">
+            {locations.map(loc => (
+              <button
+                key={loc}
+                onClick={() => setLocationFilter(loc)}
+                className={`px-4 py-2 rounded whitespace-nowrap ${
+                  locationFilter === loc
+                    ? 'bg-yellow-500 text-blue-900 font-semibold'
+                    : 'bg-white border hover:bg-gray-50'
+                }`}
+              >
+                {loc}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Listings */}
