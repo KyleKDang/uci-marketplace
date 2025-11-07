@@ -51,7 +51,7 @@ function App() {
         />
         <Route 
           path="/listing/:id" 
-          element={user ? <ProductInfo /> : <Navigate to="/" replace />}
+          element={user ? <ProductInfo user={user} onLogout={handleLogout} /> : <Navigate to="/" replace />}
         />
       </Routes>
     </BrowserRouter>

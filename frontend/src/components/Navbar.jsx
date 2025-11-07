@@ -1,10 +1,17 @@
+import { useNavigate } from 'react-router-dom';
+
 function Navbar({ user, onLogout }) {
+  const navigate = useNavigate();
+
   return (
     <nav className="bg-white shadow">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          {/* Logo and Title */}
-          <div className="flex items-center gap-3">
+          {/* Logo and Title - clickable */}
+          <div 
+            onClick={() => navigate('/dashboard')}
+            className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition"
+          >
             <img 
               src="/market-logo.png" 
               alt="Ring Road Market Logo" 

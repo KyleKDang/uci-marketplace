@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const ProductInfo = () => {
+function ProductInfo({ user, onLogout }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
@@ -59,29 +60,40 @@ const ProductInfo = () => {
 
   if (loading) {
     return (
+      <>
+      <Navbar user={user} onLogout={onLogout} />
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-xl">Loading...</div>
       </div>
+      </>
     );
   }
 
   if (error) {
     return (
+      <>
+      <Navbar user={user} onLogout={onLogout} />
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-xl text-red-600">{error}</div>
       </div>
+      </>
     );
   }
 
   if (!product) {
     return (
+      <>
+      <Navbar user={user} onLogout={onLogout} />
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-xl">Product not found</div>
       </div>
+      </>
     );
   }
 
   return (
+    <>
+    <Navbar user={user} onLogout={onLogout} />
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
         
@@ -157,6 +169,7 @@ const ProductInfo = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
